@@ -1,6 +1,5 @@
 $blue: blue;
 
-
 #visualguide-dimmer {
   background: rgba(0, 0, 0, 0.3);
   transition-duration: 0.2s;
@@ -8,14 +7,16 @@ $blue: blue;
   z-index: 100000;
   top: 0;
   left: 0;
+  transition-duration: 0.2s;
 }
 
 .visualguide-element {
-  background: rgba($blue, 0.7);
-  border: $blue 1px solid;
+  background: rgba($blue, 0.3);
+  border: $blue 3px solid;
   cursor: pointer;
+  box-sizing: border-box;
 
   &:hover {
-    border: darken($blue, 20)
+    background: rgba($blue, 0.4)
   }
 }
