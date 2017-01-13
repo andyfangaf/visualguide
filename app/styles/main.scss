@@ -1,0 +1,21 @@
+$blue: blue;
+
+
+#visualguide-dimmer {
+  background: rgba(0, 0, 0, 0.3);
+  transition-duration: 0.2s;
+  position: absolute;
+  z-index: 100000;
+  top: 0;
+  left: 0;
+}
+
+.visualguide-element {
+  background: rgba($blue, 0.7);
+  border: $blue 1px solid;
+  cursor: pointer;
+
+  &:hover {
+    border: darken($blue, 20)
+  }
+}
