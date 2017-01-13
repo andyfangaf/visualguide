@@ -31,6 +31,12 @@ function levenshtein(a, b) {
   return m[b.length][a.length];
 }
 
+function getZIndex(el) {
+  const z = window.document.defaultView.getComputedStyle(el).getPropertyValue('z-index');
+  if (isNaN(z)) return window.getZIndex(el.parentNode);
+  return z;
+};
+
 const CLASSES = {
   dimmer: 'visualguide-dimmer'
 }
@@ -42,11 +48,13 @@ class Cursor {
     this.x = 0
     this.y = 0
     this.visualguideDimmer;
-    this.initializeDimmer()
     this.componentsData = componentsData
+    this.containerComponent;
+    this.initializeDimmer()
 
     document.addEventListener('mousemove', (evt) => {
       this.updateCursor(evt)
+      this.focusElement(this.containerComponent)
     })
 
     // this.highlightUIcomponents()
@@ -57,28 +65,28 @@ class Cursor {
     this.y = evt.clientY
 
     const levenshteinIndexes = []
-    const containerComponent = evt.target.closest('[class*="ui-"]')
+    this.containerComponent = evt.target.closest('[class*="ui-"]')
 
     for (const componentName of COMPONENTS) {
-      const index = levenshtein(componentName.toString(), containerComponent.classList[0].toString())
+      const index = levenshtein(componentName, this.containerComponent.classList[0])
       levenshteinIndexes.push(index)
     }
 
     const matchingComponentIndex = levenshteinIndexes.indexOf(Math.min(...levenshteinIndexes))
     const matchingComponent = COMPONENTS[matchingComponentIndex]
     console.log(matchingComponent);
+    this.visualguideDimmer.remove()
   }
 
-  initializeDimmer(hoveredEl) {
+  initializeDimmer(hoveredEl = document.body) {
     let dimmerWidth, dimmerHeight
 
-    if (hoveredEl) {
+    if (hoveredEl == document.body) {
+      dimmerWidth = '0px'
+      dimmerHeight = '0px'
+    } else {
       dimmerWidth = document.body.scrollWidth
       dimmerHeight = document.body.scrollHeight
-    } else {
-      hoveredEl = document.body
-      dimmerWidth = 0
-      dimmerHeight = 0
     }
 
     const dimmer = document.createElement('div')
@@ -138,6 +146,11 @@ class Cursor {
     return elHighlight
   }
 
+  focusElement(hoveredEl) {
+    insertAfter(this.visualguideDimmer, hoveredEl)
+    const componentIndex = getZIndex(hoveredEl)
+    console.log(componentIndex);
+  }
 }
 
 const cursor = new Cursor()
