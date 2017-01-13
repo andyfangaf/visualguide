@@ -12,11 +12,14 @@ $blue: blue;
 
 .visualguide-element {
   background: rgba($blue, 0.3);
-  border: $blue 3px solid;
+  outline: $blue 3px solid;
   cursor: pointer;
   box-sizing: border-box;
-
+  transition-duration: 0.2s;
   &:hover {
-    background: rgba($blue, 0.4)
+    background: rgba($blue, 0.4);
+  }
+  &:active {
+    outline: lighten($blue, 20) 3px solid;
   }
 }

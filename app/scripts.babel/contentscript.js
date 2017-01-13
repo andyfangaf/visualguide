@@ -50,6 +50,7 @@ class Cursor {
     this.visualguideDimmer;
     this.componentsData = componentsData
     this.containerComponent;
+    this.previouslyHovered = document.body;
     this.initializeDimmer()
 
     document.addEventListener('mousemove', (evt) => {
@@ -75,6 +76,7 @@ class Cursor {
     const matchingComponentIndex = levenshteinIndexes.indexOf(Math.min(...levenshteinIndexes))
     const matchingComponent = COMPONENTS[matchingComponentIndex]
     console.log(matchingComponent);
+
     this.visualguideDimmer.remove()
   }
 
@@ -147,9 +149,19 @@ class Cursor {
   }
 
   focusElement(hoveredEl) {
-    insertAfter(this.visualguideDimmer, hoveredEl)
-    const componentIndex = getZIndex(hoveredEl)
-    console.log(componentIndex);
+    hoveredEl.classList.add('visualguide-element')
+
+    if (this.previouslyHovered != hoveredEl) {
+      this.previouslyHovered.classList.remove('visualguide-element')
+    }
+    this.previouslyHovered = hoveredEl
+
+    hoveredEl.addEventListener('click', (evt) => {
+      evt.stopPropagation()
+      evt.preventDefault()
+
+      window.open(`http://styleguide.myshopify.com/components/ui_${this.containerComponent}`)
+    })
   }
 }
 
